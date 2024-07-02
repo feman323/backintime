@@ -25,6 +25,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.pardir)))
 sys.path.insert(0, os.path.abspath(os.path.join(os.pardir, "plugins")))
 
 #import config to solve race conditions between config an mount
+# pylint: disable-next=W0611
 import config
 
 # -- General configuration ------------------------------------------------
