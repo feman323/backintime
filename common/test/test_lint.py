@@ -95,13 +95,13 @@ class MirrorMirrorOnTheWall(unittest.TestCase):
             'W1301',  # unused-format-string-key
             'W1401',  # anomalous-backslash-in-string (invalid escape sequence)
             'W1515',  # forgotten-debug-statement
+            'R0201',  # no-self-use
+            'R0202',  # no-classmethod-decorator
+            'R0203',  # no-staticmethod-decorator
 
             # Enable asap. This list is selection of existing (not all!)
             # problems currently exiting in the BIT code base. Quit easy to fix
             # because there count is low.
-            # 'R0201',  # no-self-use
-            # 'R0202',  # no-classmethod-decorator
-            # 'R0203',  # no-staticmethod-decorator
             # 'R0801',  # duplicate-code
             # 'W0123',  # eval-used
             # 'W0237',  # arguments-renamed
