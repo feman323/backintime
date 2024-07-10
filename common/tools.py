@@ -2317,13 +2317,13 @@ class SetupUdev(object):
 
         except dbus.exceptions.DBusException as e:
             if e._dbus_error_name == 'net.launchpad.backintime.InvalidChar':
-                raise InvalidChar(str(e))
+                raise InvalidChar(str(e)) from e
 
             elif e._dbus_error_name == 'net.launchpad.backintime.InvalidCmd':
-                raise InvalidCmd(str(e))
+                raise InvalidCmd(str(e)) from e
 
             elif e._dbus_error_name == 'net.launchpad.backintime.LimitExceeded':
-                raise LimitExceeded(str(e))
+                raise LimitExceeded(str(e))  from e
 
             else:
                 raise

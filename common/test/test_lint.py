@@ -102,17 +102,17 @@ class MirrorMirrorOnTheWall(unittest.TestCase):
             'W4902',  # deprecated-method
             'W4904',  # deprecated-class
             'W0614',  # unused-wildcard-import
+            'W0123',  # eval-used
+            'W0707',  # raise-missing-from
 
             # Enable asap. This list is selection of existing (not all!)
             # problems currently exiting in the BIT code base. Quit easy to fix
             # because there count is low.
             # 'R0801',  # duplicate-code
-            # 'W0123',  # eval-used
             # 'W0237',  # arguments-renamed
             # 'W0221',  # arguments-differ
             # 'W0603',  # global-statement
             # 'W0612',  # unused-variable
-            # 'W0707',  # raise-missing-from
         ]
 
         cmd.append('--enable=' + ','.join(err_codes))
