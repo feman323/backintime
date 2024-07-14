@@ -38,10 +38,10 @@ class GUIApplicationInstance(ApplicationInstance):
         if os.path.exists(self.raiseFile):
             os.remove(self.raiseFile)
 
-        self.check(raiseCmd)
+        self.check()
         self.startApplication()
 
-    def check(self, raiseCmd):
+    def check(self):
         """
         check if the current application is already running
         """
@@ -51,7 +51,7 @@ class GUIApplicationInstance(ApplicationInstance):
             #notify raise
             try:
                 with open(self.raiseFile, 'wt') as f:
-                    f.write(raiseCmd)
+                    f.write(self.raiseCmd)
             except OSError as e:
                 logger.error('Failed to write raise file %s: [%s] %s' %(e.filename, e.errno, e.strerror))
 
