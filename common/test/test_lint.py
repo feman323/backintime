@@ -110,7 +110,6 @@ class MirrorMirrorOnTheWall(unittest.TestCase):
             # problems currently existing in the BIT code base. Quite easy to fix
             # because their count is low.
             # 'R0801',  # duplicate-code
-            # 'W0123',  # eval-used
             # 'W0221',  # arguments-differ
             # 'W0603',  # global-statement
             # 'W0612',  # unused-variable
