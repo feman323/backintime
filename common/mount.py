@@ -540,7 +540,8 @@ class MountControl(object):
                             self)
                 self.writeUmountInfo()
 
-        except Exception:
+        except Exception as exc:
+            logger.error(str(exc), self)
             raise
         else:
             self.mountLockAquire()
@@ -578,7 +579,8 @@ class MountControl(object):
                             logger.info('unmount %s from %s'
                                         %(self.log_command, self.currentMountpoint),
                                         self)
-        except Exception:
+        except Exception as exc:
+            logger.error(str(exc), self)
             raise
         else:
             self.mountLockRelease()

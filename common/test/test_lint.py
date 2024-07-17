@@ -104,6 +104,7 @@ class MirrorMirrorOnTheWall(unittest.TestCase):
             'W0614',  # unused-wildcard-import
             'W0123',  # eval-used
             'W0707',  # raise-missing-from
+            'W0706',  # try-except-raise
 
             # Enable asap. This list is a selection of existing (not all!)
             # problems currently existing in the BIT code base. Quite easy to fix
