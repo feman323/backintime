@@ -116,7 +116,7 @@ import logger
 import tools
 import password
 from exceptions import MountException, HashCollision
-
+from contextlib import contextmanager
 
 class Mount(object):
     """
@@ -381,6 +381,25 @@ class Mount(object):
             self.profile_id = new_profile_id
             return self.mount(mode = mode, **kwargs)
 
+@contextmanager
+def mount_process_lock(control):
+    """
+    Context manager for acquiring and releasing the mount process lock.
+
+    This context manager ensures that the mount process lock is acquired
+    at the beginning of the block and released at the end of the block,
+    regardless of whether an exception is raised.
+
+    Args:
+        control (MountControl): The instance of MountControl to acquire
+                                and release the lock on.
+    """
+    control.mountProcessLockAcquire()
+    try:
+        yield
+    finally:
+        control.mountProcessLockRelease()
+
 class MountControl(object):
     """This is the low-level mount API. This should be subclassed by backends.
 
@@ -512,11 +531,8 @@ class MountControl(object):
                             identical
         """
         self.createMountStructure()
-        self.mountProcessLockAcquire()
-
-        try:
+        with mount_process_lock(self):
             if self.mounted():
-
                 if not self.compareUmountInfo():
                     #We probably have a hash collision
                     self.config.incrementHashCollision()
@@ -539,16 +555,9 @@ class MountControl(object):
                             %(self.log_command, self.currentMountpoint),
                             self)
                 self.writeUmountInfo()
-
-        except Exception as exc:
-            logger.error(str(exc), self)
-            raise
-        else:
             self.mountLockAquire()
             self.setSymlink()
-        finally:
-            self.mountProcessLockRelease()
-        return self.hash_id
+            return self.hash_id
 
     def umount(self):
         """
@@ -559,8 +568,7 @@ class MountControl(object):
         Raises:
             exceptions.MountException:  if a check failed
         """
-        self.mountProcessLockAcquire()
-        try:
+        with mount_process_lock(self):
             if not os.path.isdir(self.hash_id_path):
                 logger.info('Mountpoint %s does not exist.' % self.currentMountpoint, self)
             else:
@@ -579,14 +587,8 @@ class MountControl(object):
                             logger.info('unmount %s from %s'
                                         %(self.log_command, self.currentMountpoint),
                                         self)
-        except Exception as exc:
-            logger.error(str(exc), self)
-            raise
-        else:
             self.mountLockRelease()
             self.removeSymlink()
-        finally:
-            self.mountProcessLockRelease()
 
     def _mount(self):
         """
