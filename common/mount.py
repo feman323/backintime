@@ -532,11 +532,15 @@ class MountControl:
                             identical
         """
         self.createMountStructure()
+
         with mount_process_lock(self):
+
             if self.mounted():
+
                 if not self.compareUmountInfo():
-                    #We probably have a hash collision
+                    # We probably have a hash collision
                     self.config.incrementHashCollision()
+
                     raise HashCollision(
                         f'Hash collision occurred in hash_id {self.hash_id}. '
                         'Incrementing global value hash_collision and '
@@ -556,8 +560,10 @@ class MountControl:
                             %(self.log_command, self.currentMountpoint),
                             self)
                 self.writeUmountInfo()
+
             self.mountLockAquire()
             self.setSymlink()
+
             return self.hash_id
 
     def umount(self):
@@ -797,13 +803,17 @@ class MountControl:
         lockSuffix = '.lock'
         lock = os.path.join(lock_path, self.pid + lockSuffix)
         count = 0
+
         while self.checkLocks(lock_path, lockSuffix):
             count += 1
+
             if count == timeout:
                 raise MountException('Mountprocess lock timeout')
+
             sleep(1)
 
         logger.debug(f'Acquire mountprocess lock {lock}', self)
+
         with open(lock, 'w') as f:
             f.write(self.pid)
 
@@ -814,7 +824,9 @@ class MountControl:
         lock_path = self.mount_root
         lockSuffix = '.lock'
         lock = os.path.join(lock_path, self.pid + lockSuffix)
+
         logger.debug(f'Release mountprocess lock {lock}', self)
+
         if os.path.exists(lock):
             os.remove(lock)
 
